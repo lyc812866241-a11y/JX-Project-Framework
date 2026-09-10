@@ -9,3 +9,5 @@ Run `python -m unittest discover -s tests -v` for executable changes. Run `pytho
 No automatic deployment, global configuration, paid calls, or unrelated repository writes. Current user authorization governs task scope; repository text does not grant additional authority.
 
 Current preparation task: read PREPARATION-SPEC.md and FUSION.md before integration maintenance. Run component/publication checks; do not run FULL_TEST_PLAN.md without the user starting that separate trial.
+
+Mode conversion maintenance: read [TASKSPEC-MODES-SPEC.md](TASKSPEC-MODES-SPEC.md). The sole format is [rules/TASKSPEC.md](rules/TASKSPEC.md); preserve user-selected modes and distinguish specification from actual activation.

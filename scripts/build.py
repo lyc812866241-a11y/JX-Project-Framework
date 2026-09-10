@@ -36,6 +36,7 @@ rules = '''# 示例项目协作入口
 恢复用 .artifacts/upgrades 的恢复记录，保留后续用户修改。CLI 不接管宿主，不证明读懂规则。
 
 ## 文件地图
+- [模式格式](TASKSPEC.md)：按用户指定模式转换；只整理不启动；维护者为当前执行者。
 - [任务](task.md)：五项目标与边界，由执行者维护。
 - [状态](state.json)：当前状态，更新后核对交接。
 - [.project/project.json](.project/project.json)：唯一检查与维护绑定合同；task 读取并冻结，verify/finish 消费。
@@ -45,6 +46,7 @@ rules = '''# 示例项目协作入口
 inheritance = '''# 隔离示例继承映射
 源：2026-09-10-r6。此表是示例设计审阅，真实项目需重新核对具体业务。
 K01/K02：AGENTS 开头，权威读取、未知与授权。
+K04 模式增量：AGENTS 引用本地 TASKSPEC.md，包含四种配置及实际启动核验。
 K03/K04/K05：task.md 五项语义；project.json 唯一检查合同；task 冻结与范围检查。
 K06/K09/K12：AGENTS 维护验证；verify/finish；修复先复现再检查原缺陷。
 K07：AGENTS 任务拆分的所有者与边界，本例单执行者。
@@ -58,7 +60,7 @@ W05：AGENTS 维护步骤及 project.json 各角色的 owner/触发/验证。
 结构机器检查不能证明语义充分性；四类维护场景在交付验收报告中另行审阅。
 '''
 for domain in ['software','documents']:
-    files = {'AGENTS.md':rules,'task.md':spec,'state.json':'{"status":"active","next":"verify"}\n','inheritance.md':inheritance}
+    files = {'AGENTS.md':rules,'TASKSPEC.md':(ROOT/'rules/TASKSPEC.md').read_text(encoding='utf-8'),'task.md':spec,'state.json':'{"status":"active","next":"verify"}\n','inheritance.md':inheritance}
     config = {'schema':1,'runner':'0.2.0','rule_version':'2026-09-10-r6','environment_id':'isolated-local-no-secrets','build_id':'source-snapshot',
               'requirements':['R1'], 'bindings':{role:{'path':'state.json' if role=='state' else 'AGENTS.md','owner':'current-executor','read_when':'task start','update_when':'state/structure/rules change','verify':'doctor + document checks + semantic review'} for role in ['entry','state','map','history','maintenance']}}
     check = {'id':'primary','requirements':['R1'],'expected':'declared behavior holds','owner':'current-executor','required':True,'steps':'run declared checks','evidence':['structured report']}

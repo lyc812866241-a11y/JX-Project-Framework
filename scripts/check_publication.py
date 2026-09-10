@@ -78,6 +78,8 @@ with tempfile.TemporaryDirectory(prefix='jx-publication-smoke-') as d:
     manifest=str(clean/'templates/documents.manifest.json')
     cli(['init','--manifest',manifest,'--dry-run'],'preview');assert not target.exists()
     cli(['init','--manifest',manifest,'--apply'],'applied')
+    assert (target/'TASKSPEC.md').read_bytes()==(clean/'rules/TASKSPEC.md').read_bytes(), 'Installed mode format missing or changed'
+    assert '(TASKSPEC.md)' in (target/'AGENTS.md').read_text(encoding='utf-8'), 'Installed mode route missing'
     cli(['doctor'],'ok')
     cli(['task','--task','INIT','--spec','task.md','--scope','handoff.json','--apply'],'captured')
     cli(['verify','--task','INIT'],'pending_manual')

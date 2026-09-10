@@ -38,3 +38,7 @@ python .\jxcheck-0.2.0.pyz --root C:\项目路径 restore --backup 返回的ID -
 保留旧包与合同，按来源差异更新本地工作流以及project.json的runner/rule_version，制作新的manifest并先预览；执行upgrade应用到未冲突文件，更新锁。配置变更后旧任务合同不匹配是预期拒绝，需在明确修订范围后用新任务ID捕获，不能覆盖旧证据。旧版本没有checkpoint，首次从实际规格建立，不编造历史。
 
 执行器新增命令但不改变schema=1的既有字段；新锁的runner_hash会不同，不能拿旧包运行新锁项目。返回旧版时用restore保留的字节和旧执行器，再重新验证，不把恢复文件等同于业务验收。
+
+## TASK_SPEC_MODES_V1 格式增量
+
+执行器仍为 v0.2.0/r6。新增 [模式格式](rules/TASKSPEC.md)，源版本用实际提交 SHA 区分。新项目将格式本地化并从 AGENTS 引用；旧项目仅在升级授权内合并格式、地图与 K04 映射，再做正常/反例审阅。已有任务和调度不自动切换，已有证据按原合同保留。

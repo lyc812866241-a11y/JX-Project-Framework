@@ -32,3 +32,7 @@ task 必须在规格/检查确定且业务修改前捕获；初次接入可先�
 `checkpoint --task <id> --phase <phase> --next <下一步> --owner <负责人>` 保存恢复点，complete必须有当前ready；其他阶段只是进度记录。`status --task <id>` 比较实际版本和检查点，过期的complete显示needs_review。首次无检查点从实际规格开始；不要伪造恢复记录。
 
 恢复点保存在.artifacts/control（不参与源码快照），不能代替项目业务状态；同步业务文档后重验。适配步骤见 [DELIVERY_LOOP](DELIVERY_LOOP.md) 和 [ADAPTERS](ADAPTERS.md)。
+
+## 模式与执行器边界
+
+[Task Spec 格式](rules/TASKSPEC.md) 由 AI 按需读取并适配。jxcheck 的 task/verify/finish 不会创建 Goal、定时或 Heartbeat；调用宿主机制后在运行记录保存真实标识与核验状态。本次不新增 CLI 模式参数。

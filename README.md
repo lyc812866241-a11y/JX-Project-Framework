@@ -53,3 +53,7 @@
 已选能力及不采用的部分见 [融合对照](FUSION.md)。接入后按 [持续交付流程](DELIVERY_LOOP.md) 执行，新增coverage、checkpoint、status与gate。使用方式仍是一个链接。
 
 完整新项目试跑方案见 [FULL_TEST_PLAN.md](FULL_TEST_PLAN.md)，状态为未执行；组件验证不替代完整试跑。旧版升级见 [UPGRADE.md](UPGRADE.md)。
+
+## 按你指定的模式整理任务
+
+你可以说“用 Goal 模式完成预约流程，支付先不做”，或“整理成定时执行的规格，先给我看”。AI 按 [Task Spec 格式](rules/TASKSPEC.md) 转换；只生成规格不会启动。四种常用配置为单次、Goal、定时和 Heartbeat；实际启动依赖宿主提供的机制。本次增加格式与读取路由，未增加调度器。

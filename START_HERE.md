@@ -71,3 +71,7 @@
 ## 接入后继续工作的路由
 
 在目标AGENTS中适配 [DELIVERY_LOOP.md](DELIVERY_LOOP.md)：从既有规格进入实施、审阅、gate、coverage、checkpoint及status恢复。检查器命令见TOOLING。来源融合与裁剪依据见 [FUSION.md](FUSION.md)；不要求用户逐项阅读。目标项目须保留可达的本地流程。
+
+## 按模式生成规格与本地继承
+
+形成规格时读取 [Task Spec 格式](rules/TASKSPEC.md)，保留用户指定模式及“仅整理/执行”意图；不强迫用户选择模式或填写字段。初始化把格式适配到目标项目本地（如 .project/TASKSPEC.md），已有同职责文件则合并，根 AGENTS 明确引用并登记地图/维护者和 K04 映射。核对四种配置及只整理不启动等反例。接入初始化与后续业务模式分别记录，不能把用户想要的业务 Goal 当作框架已启用 Goal 的证据。
