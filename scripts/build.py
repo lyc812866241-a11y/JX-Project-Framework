@@ -37,6 +37,7 @@ K09 同根因扩展审查：提炼触发条件与错误模式，沿共享实现/
 恢复用 .artifacts/upgrades 的恢复记录，保留后续用户修改。CLI 不接管宿主，不证明读懂规则。
 
 ## 文件地图
+- [交接流程](HANDOFF.md)：结束/交接完整核账及新窗口接任核验；记录复用task.md历史区、当前恢复点state.json，所有者为当前执行者。
 - [验证流程](VERIFICATION.md)：需求测试集、断言有效性与交付复验；维护者为当前执行者。
 - [模式格式](TASKSPEC.md)：按用户指定模式转换；只整理不启动；维护者为当前执行者。
 - [任务](task.md)：五项目标与边界，由执行者维护。
@@ -53,7 +54,7 @@ K03/K04/K05：task.md 五项语义；project.json 唯一检查合同；task 冻�
 K06/K12：本地 VERIFICATION.md 保留需求场景、断言、隔离故障检出及最终版本复验；本例夹具不证明真实业务覆盖。
 K06/K09/K12：AGENTS 维护验证；verify/finish；修复先复现再检查原缺陷。
 K07：AGENTS 任务拆分的所有者与边界，本例单执行者。
-K08/K11：AGENTS 状态/历史/地图/环境变化触发与恢复路径。
+K08/K11：AGENTS 状态/历史/地图/环境变化触发与恢复路径；本地HANDOFF.md规定完整核账、访问边界、语义落点核对和接任核验，核账索引在task.md历史区、当前恢复点state.json。
 K10：本映射及源版本；升级需差异/场景核对。
 W01：AGENTS 文件地图；结构变化后更新引用和检查定义。
 W02：AGENTS 维护验证；必需项失败禁止完成。
@@ -63,7 +64,7 @@ W05：AGENTS 维护步骤及 project.json 各角色的 owner/触发/验证。
 结构机器检查不能证明语义充分性；四类维护场景在交付验收报告中另行审阅。
 '''
 for domain in ['software','documents']:
-    files = {'AGENTS.md':rules,'VERIFICATION.md':(ROOT/'rules/工作流库/执行验证.md').read_text(encoding='utf-8').split('### 执行器绑定与运行')[0],'TASKSPEC.md':(ROOT/'rules/TASKSPEC.md').read_text(encoding='utf-8'),'task.md':spec,'state.json':'{"status":"active","next":"verify"}\n','inheritance.md':inheritance}
+    files = {'AGENTS.md':rules,'HANDOFF.md':(ROOT/'rules/工作流库/项目维护.md').read_text(encoding='utf-8').split('## 六、交接前完整核账与接任核验')[1],'VERIFICATION.md':(ROOT/'rules/工作流库/执行验证.md').read_text(encoding='utf-8').split('### 执行器绑定与运行')[0],'TASKSPEC.md':(ROOT/'rules/TASKSPEC.md').read_text(encoding='utf-8'),'task.md':spec,'state.json':'{"status":"active","next":"verify"}\n','inheritance.md':inheritance}
     config = {'schema':1,'runner':'0.2.0','rule_version':'2026-09-10-r6','environment_id':'isolated-local-no-secrets','build_id':'source-snapshot',
               'requirements':['R1'], 'bindings':{role:{'path':'state.json' if role=='state' else 'AGENTS.md','owner':'current-executor','read_when':'task start','update_when':'state/structure/rules change','verify':'doctor + document checks + semantic review'} for role in ['entry','state','map','history','maintenance']}}
     check = {'id':'primary','requirements':['R1'],'expected':'declared behavior holds','owner':'current-executor','required':True,'steps':'run declared checks','evidence':['structured report']}
