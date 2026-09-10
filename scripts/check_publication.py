@@ -80,6 +80,8 @@ with tempfile.TemporaryDirectory(prefix='jx-publication-smoke-') as d:
     cli(['init','--manifest',manifest,'--apply'],'applied')
     assert (target/'TASKSPEC.md').read_text(encoding='utf-8')==(clean/'rules/TASKSPEC.md').read_text(encoding='utf-8'), 'Installed mode format missing or changed'
     assert '(TASKSPEC.md)' in (target/'AGENTS.md').read_text(encoding='utf-8'), 'Installed mode route missing'
+    assert (target/'VERIFICATION.md').read_text(encoding='utf-8')==(clean/'rules/工作流库/执行验证.md').read_text(encoding='utf-8').split('### 执行器绑定与运行')[0], 'Verification design lost during installation'
+    assert '(VERIFICATION.md)' in (target/'AGENTS.md').read_text(encoding='utf-8'), 'Missing local verification route'
     cli(['doctor'],'ok')
     cli(['task','--task','INIT','--spec','task.md','--scope','handoff.json','--apply'],'captured')
     cli(['verify','--task','INIT'],'pending_manual')
