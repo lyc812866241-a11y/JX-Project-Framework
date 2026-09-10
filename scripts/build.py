@@ -15,7 +15,7 @@ with tempfile.TemporaryDirectory() as tmp:
     stage = Path(tmp)
     shutil.copytree(ROOT/'jxcheck',stage/'jxcheck',ignore=shutil.ignore_patterns('__pycache__'))
     (ROOT/'dist').mkdir(exist_ok=True)
-    zipapp.create_archive(stage,ROOT/'dist/jxcheck-0.1.0.pyz',main='jxcheck.core:main',compressed=True)
+    zipapp.create_archive(stage,ROOT/'dist/jxcheck-0.2.0.pyz',main='jxcheck.core:main',compressed=True)
 
 spec = '\n'.join('## '+h+'\n隔离演示：验证已配置行为，不代表真实项目验收。' for h in ['目标','上下文','范围','约束','验收'])
 rules = '''# 示例项目协作入口
@@ -24,7 +24,7 @@ rules = '''# 示例项目协作入口
 每次修复查直接原因、上游产生机制与检出缺口，保留能抓原缺陷的检查。
 任务拆分必须说明读写边界、接口唯一维护者及依赖；本例不创建子任务。
 当前状态在 state.json，结构和维护流程在本文件，历史证据在 .artifacts/runs；task.md 保留原要求。
-源版本 2026-09-10-r5；初始化/升级核对 K01—K12、W01—W05，语义映射见 inheritance.md。
+源版本 2026-09-10-r6；初始化/升级核对 K01—K12、W01—W05，语义映射见 inheritance.md。
 结构变化更新本地图及引用，当前/历史分开，交接写下一步；实际环境变化更新 project.json 非敏感环境标识。
 不存真密钥；没有外部服务不建 .env，新增服务后重新绑定环境说明和验证。
 本例无发布/部署。后续启用时另明确版本、授权、恢复及实际入口验证。
@@ -43,7 +43,7 @@ rules = '''# 示例项目协作入口
 - .project/tasks/：任务基线；.artifacts/runs/：执行器证据，不充当源码。
 '''
 inheritance = '''# 隔离示例继承映射
-源：2026-09-10-r5。此表是示例设计审阅，真实项目需重新核对具体业务。
+源：2026-09-10-r6。此表是示例设计审阅，真实项目需重新核对具体业务。
 K01/K02：AGENTS 开头，权威读取、未知与授权。
 K03/K04/K05：task.md 五项语义；project.json 唯一检查合同；task 冻结与范围检查。
 K06/K09/K12：AGENTS 维护验证；verify/finish；修复先复现再检查原缺陷。
@@ -59,7 +59,7 @@ W05：AGENTS 维护步骤及 project.json 各角色的 owner/触发/验证。
 '''
 for domain in ['software','documents']:
     files = {'AGENTS.md':rules,'task.md':spec,'state.json':'{"status":"active","next":"verify"}\n','inheritance.md':inheritance}
-    config = {'schema':1,'runner':'0.1.0','rule_version':'2026-09-10-r5','environment_id':'isolated-local-no-secrets','build_id':'source-snapshot',
+    config = {'schema':1,'runner':'0.2.0','rule_version':'2026-09-10-r6','environment_id':'isolated-local-no-secrets','build_id':'source-snapshot',
               'requirements':['R1'], 'bindings':{role:{'path':'state.json' if role=='state' else 'AGENTS.md','owner':'current-executor','read_when':'task start','update_when':'state/structure/rules change','verify':'doctor + document checks + semantic review'} for role in ['entry','state','map','history','maintenance']}}
     check = {'id':'primary','requirements':['R1'],'expected':'declared behavior holds','owner':'current-executor','required':True,'steps':'run declared checks','evidence':['structured report']}
     if domain=='software':

@@ -22,7 +22,7 @@ import xml.etree.ElementTree as ET
 from . import __version__
 
 SCHEMA = 1
-RULE_VERSION = "2026-09-10-r5"
+RULE_VERSION = "2026-09-10-r6"
 ROLES = {"entry", "state", "map", "history", "maintenance"}
 EXCLUDED = {".git", ".artifacts", "__pycache__", ".venv", "node_modules"}
 SECRET = {".env", "credentials.json", "secrets.json"}
@@ -351,6 +351,66 @@ def finish(root, task):
         return {"status": "blocked", "reason": str(e)}
 
 
+def coverage(root, task):
+    """Explain requirement outcomes without treating test count as acceptance."""
+    root = Path(root).resolve()
+    c = load_project(root)
+    result = finish(root, task)
+    outcomes = {r['id']: r['status'] for r in result.get('results', [])}
+    rows = []
+    for req in c['requirements']:
+        checks = [ch for ch in c['checks'] if req in ch['requirements']]
+        rows.append({'requirement': req, 'checks': [
+            {'id': ch['id'], 'required': ch['required'], 'expected': ch['expected'],
+             'observed': outcomes.get(ch['id'], 'unverified')} for ch in checks]})
+    return {**result, 'requirements': rows,
+            'coverage_limit': 'Declared requirements only; missing user needs and semantic sufficiency require review'}
+
+
+def checkpoint(root, task, phase, next_action, owner):
+    root = Path(root).resolve()
+    require(phase in {'planned', 'executing', 'verifying', 'blocked', 'paused', 'complete'}, 'Invalid phase')
+    require(next_action.strip() and owner.strip(), 'Owner and next action required')
+    c, t, before = contract(root, task)
+    evidence = finish(root, task)
+    require(phase != 'complete' or evidence['status'] == 'ready', 'Completion checkpoint requires current ready evidence')
+    with lock(root):
+        _, current, now = contract(root, task)
+        require(now == before and digest(current) == digest(t), 'Inputs changed while saving checkpoint')
+        base = inside(root, '.artifacts/control/' + task)
+        pointer = base / 'current.json'
+        previous = read(pointer) if pointer.exists() else None
+        sequence = 1 if previous is None else previous['sequence'] + 1
+        record = {'task': task, 'sequence': sequence, 'phase': phase, 'owner': owner,
+                  'next': next_action, 'contract_hash': digest(t), 'snapshot': before,
+                  'evidence_status_at_save': evidence['status'], 'time': time.time(),
+                  'meaning': 'Progress note; not human authentication or business acceptance'}
+        # Immutable records plus one atomically replaced current pointer.
+        entry = base / ('record-' + uuid.uuid4().hex + '.json')
+        atomic(entry, record)
+        atomic(pointer, {'record': entry.name, 'sha256': digest(record), 'sequence': sequence})
+    return {'status': 'saved', 'task': task, 'phase': phase, 'next': next_action}
+
+
+def status(root, task):
+    root = Path(root).resolve()
+    task_path(root, task)
+    evidence = finish(root, task)
+    base = inside(root, '.artifacts/control/' + task)
+    pointer = read(base / 'current.json')
+    record = read(inside(base, pointer['record']))
+    require(digest(record) == pointer['sha256'] and record['task'] == task, 'Checkpoint integrity mismatch')
+    current = read(task_path(root, task))
+    fresh = record['snapshot'] == snapshot(root) and record['contract_hash'] == digest(current)
+    phase = record['phase']
+    if not fresh or (phase == 'complete' and evidence['status'] != 'ready'):
+        phase = 'needs_review'
+    return {'status': 'stale' if phase == 'needs_review' else evidence['status'],
+            'task': task, 'recorded_phase': record['phase'], 'current_phase': phase,
+            'owner': record['owner'], 'next': record['next'], 'checkpoint_fresh': fresh,
+            'verification': evidence, 'note': 'Resume from current project facts; historical completion is not current proof'}
+
+
 def installation(root, manifest, apply=False, upgrade=False):
     """Reviewable owned-file updates; user-edited files are conflicts."""
     root = Path(root).resolve()
@@ -441,13 +501,17 @@ def main():
         g.add_argument("--apply", action="store_true")
         g.add_argument("--dry-run", action="store_true")
     sub.add_parser("doctor")
-    for name in ("verify", "finish", "task"):
+    for name in ("verify", "finish", "task", "coverage", "checkpoint", "status", "gate"):
         p = sub.add_parser(name)
         p.add_argument("--task", required=True)
         if name == "task":
             p.add_argument("--spec", required=True)
             p.add_argument("--scope", nargs="+", required=True)
             p.add_argument("--apply", action="store_true")
+        if name == 'checkpoint':
+            p.add_argument('--phase', required=True)
+            p.add_argument('--next', required=True)
+            p.add_argument('--owner', required=True)
     p = sub.add_parser("restore")
     p.add_argument("--backup", required=True)
     p.add_argument("--apply", action="store_true")
@@ -460,9 +524,20 @@ def main():
             result = capture_task(root, args.task, args.spec, args.scope, args.apply)
         elif args.command == "restore":
             result = restore(root, args.backup, args.apply)
+        elif args.command == 'checkpoint':
+            result = checkpoint(root, args.task, args.phase, args.next, args.owner)
+        elif args.command == 'coverage':
+            result = coverage(root, args.task)
+        elif args.command == 'status':
+            task_path(root, args.task)
+            result = status(root, args.task)
+        elif args.command == 'gate':
+            result = verify(root, args.task)
+            if result['status'] == 'ready':
+                result = coverage(root, args.task)
         else:
             result = {"doctor": lambda: doctor(root), "verify": lambda: verify(root, args.task), "finish": lambda: finish(root, args.task)}[args.command]()
     except (Invalid, OSError, ValueError, KeyError, TypeError) as e:
         result = {"status": "blocked", "reason": str(e)}
     print(json.dumps(result, ensure_ascii=False, indent=2))
-    sys.exit(0 if result["status"] in {"ok", "ready", "preview", "applied", "captured", "restored"} else 2)
+    sys.exit(0 if result["status"] in {"ok", "ready", "preview", "applied", "captured", "restored", "saved"} else 2)

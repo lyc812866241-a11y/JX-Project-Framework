@@ -15,7 +15,7 @@ evidence = ROOT/'evidence'
 evidence.mkdir(exist_ok=True)
 session = Path(tempfile.mkdtemp(prefix='jxcheck-distribution-'))
 tool = session/'jxcheck.pyz'
-shutil.copy2(ROOT/'dist/jxcheck-0.1.0.pyz',tool)
+shutil.copy2(ROOT/'dist/jxcheck-0.2.0.pyz',tool)
 for name in ['software','documents']:
     shutil.copy2(ROOT/'templates'/f'{name}.manifest.json',session/f'{name}.json')
 events=[]

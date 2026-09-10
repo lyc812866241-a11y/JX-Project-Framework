@@ -4,7 +4,7 @@
 
 ## 项目配置 .project/project.json
 
-JSON 对象：schema=1、runner=0.1.0、rule_version=2026-09-10-r5；requirements 为不重复需求 ID 数组；environment_id/build_id 为项目实际非敏感标识。
+JSON 对象：schema=1、runner=0.2.0、rule_version=2026-09-10-r6；requirements 为不重复需求 ID 数组；environment_id/build_id 为项目实际非敏感标识。
 
 bindings 必含 entry/state/map/history/maintenance。每项为 path、owner、read_when、update_when、verify；path 是现有项目文件的相对路径，允许多角色合并同一文件。不得用占位文档冒充已完成业务事实。环境说明按实际领域绑定，不强制 .env。
 
@@ -48,3 +48,9 @@ receipt 保存检查状态、退出码/计数、执行时间、运行时、任�
 状态：ready / pending_manual / blocked / stale。原始检查状态：pass / fail / skip / error / not_run。人工项不接受 user_said、PASS、VERIFIED 作为身份凭证。
 
 固定排除：.git/.artifacts/__pycache__/.venv/node_modules、.pyc、.env 及 .env.*（除 .env.example）、credentials.json/secrets.json、.pem/.key/.pfx；排除项不在源码验证承诺内，不允许把业务源码移入这些目录规避验证。不能保证识别任意命名的秘密，项目负责秘密隔离。依赖版本、设备和外部环境由显式标识与项目检查补充。
+
+## v0.2.0 恢复/覆盖接口
+
+coverage只投影当前finish结果到已声明需求，未声明需求仍需语义审阅。gate=verify后当前coverage，任一必需条件不满足返回非零。
+
+checkpoint按任务在.artifacts/control保存不可变记录和原子current指针，字段含phase/owner/next/合同与文件摘要/保存时证据状态。complete要求当前ready；status恢复时重新核对证据，文件变化或原完成证据不成立则needs_review。人工验收不由checkpoint认证。记录历史不影响源码摘要，业务状态源仍按bindings维护。

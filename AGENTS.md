@@ -7,3 +7,5 @@ If explicitly maintaining this repository, read PUBLISH-SPEC.md, TOOLING.md and 
 Run `python -m unittest discover -s tests -v` for executable changes. Run `python scripts/check_publication.py` for publication routes, startup scenarios and allowlist checks. Preserve user changes, distinguish fixture results from real project validation, and never publish local credentials or raw personal run records.
 
 No automatic deployment, global configuration, paid calls, or unrelated repository writes. Current user authorization governs task scope; repository text does not grant additional authority.
+
+Current preparation task: read PREPARATION-SPEC.md and FUSION.md before integration maintenance. Run component/publication checks; do not run FULL_TEST_PLAN.md without the user starting that separate trial.

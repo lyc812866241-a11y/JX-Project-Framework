@@ -38,7 +38,7 @@
 
 读取 [TOOLING.md](TOOLING.md) 和 [CONTRACT.md](CONTRACT.md)，AI 为当前项目制作 manifest 和 project.json，复用既有记录/测试。templates 是隔离测试夹具，**不得作为真实项目直接安装**。项目没有业务实现时，先配置真实可执行的接入/文档断言，将业务要求登记未实现；必要人工项保持 pending_manual，不能填假成功。
 
-执行器可从源码构建后放目标内 `.project/tools/jxcheck-0.1.0.pyz`，在本地规则写明调用位置。维护 workflow 与配置需使用目标项目可达路径，不能依赖本仓库维护者的个人路径。
+执行器可从源码构建后放目标内 `.project/tools/jxcheck-0.2.0.pyz`，在本地规则写明调用位置。维护 workflow 与配置需使用目标项目可达路径，不能依赖本仓库维护者的个人路径。
 
 ## 4. 执行配置
 
@@ -67,3 +67,7 @@
 - 用户不需要提供长提示词、文件列表、命令参数或技术栈术语。
 
 这些约定能被结构检查和场景审阅验证；不同 AI 宿主对“裸链接”的实际行为需独立新会话检验，不能以此文档存在代替行为实测。
+
+## 接入后继续工作的路由
+
+在目标AGENTS中适配 [DELIVERY_LOOP.md](DELIVERY_LOOP.md)：从既有规格进入实施、审阅、gate、coverage、checkpoint及status恢复。检查器命令见TOOLING。来源融合与裁剪依据见 [FUSION.md](FUSION.md)；不要求用户逐项阅读。目标项目须保留可达的本地流程。

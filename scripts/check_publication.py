@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import ast
 
 ROOT=Path(__file__).resolve().parents[1]
 IGNORE={'.git','evidence','.artifacts','dist','__pycache__','.venv','node_modules'}
@@ -37,6 +38,24 @@ assert '用户不需要提供长提示词' in start
 rules=(ROOT/'rules/AGENTS-通用框架.md').read_text(encoding='utf-8')
 assert all('| '+k+' |' in rules for k in [*[f'K{i:02}' for i in range(1,13)],*[f'W{i:02}' for i in range(1,6)]])
 
+source_lock=json.loads((ROOT/'sources.lock.json').read_text(encoding='utf-8'))
+known={r['repo'] for r in source_lock['sources']}
+assert len(known)==4
+for row in source_lock['sources']:
+    assert re.fullmatch('[a-f0-9]{40}',row['commit'])
+    assert row['license']=='MIT'
+    for f in row['files']:
+        assert '/blob/'+row['commit']+'/' in f['url']
+        assert re.fullmatch('[a-f0-9]{64}',f['sha256'])
+mapping=json.loads((ROOT/'integration-map.json').read_text(encoding='utf-8'))['entries']
+assert len(mapping)==9 and len({r['id'] for r in mapping})==9
+test_names={n.name for p in (ROOT/'tests').glob('test_*.py') for n in ast.walk(ast.parse(p.read_text(encoding='utf-8'))) if isinstance(n,ast.FunctionDef)}
+for row in mapping:
+    assert row['source'] in known and (ROOT/row['workflow']).is_file()
+    symbols={n.name for n in ast.walk(ast.parse((ROOT/row['implementation']).read_text(encoding='utf-8'))) if isinstance(n,ast.FunctionDef)}
+    assert set(row['symbols'])<=symbols and set(row['tests'])<=test_names
+assert '**未执行**' in (ROOT/'FULL_TEST_PLAN.md').read_text(encoding='utf-8')
+
 with tempfile.TemporaryDirectory(prefix='jx-publication-smoke-') as d:
     temp=Path(d)
     # Copy only reviewed public source to a directory with no JX parent rules.
@@ -47,13 +66,14 @@ with tempfile.TemporaryDirectory(prefix='jx-publication-smoke-') as d:
         return subprocess.run(argv,cwd=cwd,capture_output=True,env={**os.environ,'PYTHONIOENCODING':'utf-8'})
     built=execute([sys.executable,'scripts/build.py'],clean)
     assert built.returncode==0,built.stderr.decode(errors='replace')
-    runner=temp/'runner.pyz';shutil.copy2(clean/'dist/jxcheck-0.1.0.pyz',runner)
+    runner=temp/'runner.pyz';shutil.copy2(clean/'dist/jxcheck-0.2.0.pyz',runner)
     target=temp/'project'
     events=[]
     def cli(args,expected):
         p=execute([sys.executable,str(runner),'--root',str(target),*args],temp)
         data=json.loads(p.stdout.decode('utf-8'))
         assert data['status']==expected,(args,data)
+        assert (p.returncode==0)==(expected in {'preview','applied','ok','captured','saved','ready'}),(args,p.returncode)
         events.append({'command':args[0],'expected':expected,'actual':data['status']})
     manifest=str(clean/'templates/documents.manifest.json')
     cli(['init','--manifest',manifest,'--dry-run'],'preview');assert not target.exists()
@@ -61,6 +81,15 @@ with tempfile.TemporaryDirectory(prefix='jx-publication-smoke-') as d:
     cli(['doctor'],'ok')
     cli(['task','--task','INIT','--spec','task.md','--scope','handoff.json','--apply'],'captured')
     cli(['verify','--task','INIT'],'pending_manual')
+    cli(['coverage','--task','INIT'],'pending_manual')
+    cli(['checkpoint','--task','INIT','--phase','paused','--next','await actual human review','--owner','executor'],'saved')
+    cli(['status','--task','INIT'],'pending_manual')
+    cli(['checkpoint','--task','INIT','--phase','complete','--next','done','--owner','executor'],'blocked')
+    cli(['gate','--task','INIT'],'pending_manual')
+    shell=shutil.which('pwsh') or shutil.which('powershell')
+    if shell:
+        p=execute([shell,'-NoProfile','-File',str(clean/'templates/project-gate.ps1'),'-Runner',str(runner),'-ProjectRoot',str(target),'-TaskId','INIT','-PythonExecutable',sys.executable],temp)
+        assert p.returncode==2, 'Adapter must propagate pending_manual as failure'
     (target/'handoff.json').write_text('{"status":"changed"}')
     cli(['finish','--task','INIT'],'stale')
     cli(['verify','--task','INIT'],'blocked')
@@ -68,6 +97,7 @@ with tempfile.TemporaryDirectory(prefix='jx-publication-smoke-') as d:
     cli(['doctor'],'blocked')
 
 summary={'status':'pass','public_files':len(files),'local_links':links,'startup_scenarios_present':7,
+         'fusion_mappings':len(mapping),'sources':len(known),'powershell_adapter':'negative verified' if shell else 'not available',
          'isolated_commands':events,'new_ai_session_behavior':'not independently tested'}
 (ROOT/'evidence').mkdir(exist_ok=True)
 (ROOT/'evidence/publication-check.json').write_bytes(json.dumps(summary,ensure_ascii=False,indent=2).encode())

@@ -1,2 +1,2 @@
 """Local project verification, with explicit evidence boundaries."""
-__version__ = "0.1.0"
+__version__ = "0.2.0"

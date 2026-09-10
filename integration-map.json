@@ -1,0 +1,162 @@
+{
+  "schema": 1,
+  "entries": [
+    {
+      "id": "F01",
+      "source": "obra/superpowers",
+      "capability": "fresh verification",
+      "implementation": "jxcheck/core.py",
+      "symbols": [
+        "verify",
+        "finish",
+        "coverage"
+      ],
+      "workflow": "DELIVERY_LOOP.md",
+      "tests": [
+        "test_A04_normal",
+        "test_A07_all_source_changes_stale"
+      ],
+      "adoption": "independent implementation/adaptation",
+      "semantic_review": "Reviewed with limits and exclusions in FUSION.md",
+      "full_project_test": "not_run"
+    },
+    {
+      "id": "F02",
+      "source": "obra/superpowers",
+      "capability": "root cause and regression",
+      "implementation": "jxcheck/core.py",
+      "symbols": [
+        "execute"
+      ],
+      "workflow": "DELIVERY_LOOP.md",
+      "tests": [
+        "test_A09_A10_regression_red_green_deleted_test"
+      ],
+      "adoption": "independent implementation/adaptation",
+      "semantic_review": "Reviewed with limits and exclusions in FUSION.md",
+      "full_project_test": "not_run"
+    },
+    {
+      "id": "F03",
+      "source": "obra/superpowers",
+      "capability": "bounded plan and ownership",
+      "implementation": "jxcheck/core.py",
+      "symbols": [
+        "contract"
+      ],
+      "workflow": "DELIVERY_LOOP.md",
+      "tests": [
+        "test_A13_scope_link_state"
+      ],
+      "adoption": "independent implementation/adaptation",
+      "semantic_review": "Reviewed with limits and exclusions in FUSION.md",
+      "full_project_test": "not_run"
+    },
+    {
+      "id": "F04",
+      "source": "gsd-build/get-shit-done",
+      "capability": "durable state and recovery",
+      "implementation": "jxcheck/core.py",
+      "symbols": [
+        "checkpoint",
+        "status"
+      ],
+      "workflow": "DELIVERY_LOOP.md",
+      "tests": [
+        "test_history_and_checkpoints_preserve_evidence",
+        "test_resume_marks_stale_completion"
+      ],
+      "adoption": "independent implementation/adaptation",
+      "semantic_review": "Reviewed with limits and exclusions in FUSION.md",
+      "full_project_test": "not_run"
+    },
+    {
+      "id": "F05",
+      "source": "gsd-build/get-shit-done",
+      "capability": "conversational acceptance adaptation",
+      "implementation": "jxcheck/core.py",
+      "symbols": [
+        "finish"
+      ],
+      "workflow": "DELIVERY_LOOP.md",
+      "tests": [
+        "test_manual_requirement_cannot_complete"
+      ],
+      "adoption": "independent implementation/adaptation",
+      "semantic_review": "Reviewed with limits and exclusions in FUSION.md",
+      "full_project_test": "not_run"
+    },
+    {
+      "id": "F06",
+      "source": "lordaeternus/agent-execution-harness",
+      "capability": "evidence-backed claims",
+      "implementation": "jxcheck/core.py",
+      "symbols": [
+        "coverage",
+        "finish"
+      ],
+      "workflow": "DELIVERY_LOOP.md",
+      "tests": [
+        "test_coverage_unverified_and_ready",
+        "test_gate_cli_runs_checks_and_rejects_regression"
+      ],
+      "adoption": "independent implementation/adaptation",
+      "semantic_review": "Reviewed with limits and exclusions in FUSION.md",
+      "full_project_test": "not_run"
+    },
+    {
+      "id": "F07",
+      "source": "lordaeternus/agent-execution-harness",
+      "capability": "scope and recovery",
+      "implementation": "jxcheck/core.py",
+      "symbols": [
+        "contract",
+        "restore"
+      ],
+      "workflow": "DELIVERY_LOOP.md",
+      "tests": [
+        "test_A02_restore_preserves_later_change",
+        "test_A13_scope_link_state"
+      ],
+      "adoption": "independent implementation/adaptation",
+      "semantic_review": "Reviewed with limits and exclusions in FUSION.md",
+      "full_project_test": "not_run"
+    },
+    {
+      "id": "F08",
+      "source": "lyc812866241-a11y/AI-Operation",
+      "capability": "executable acceptance and install",
+      "implementation": "jxcheck/core.py",
+      "symbols": [
+        "installation",
+        "doctor",
+        "verify"
+      ],
+      "workflow": "DELIVERY_LOOP.md",
+      "tests": [
+        "test_A01_A02_install_upgrade_restore"
+      ],
+      "adoption": "independent implementation/adaptation",
+      "semantic_review": "Reviewed with limits and exclusions in FUSION.md",
+      "full_project_test": "not_run"
+    },
+    {
+      "id": "F09",
+      "source": "lyc812866241-a11y/AI-Operation",
+      "capability": "reject text-only success and stale flags",
+      "implementation": "jxcheck/core.py",
+      "symbols": [
+        "execute",
+        "finish"
+      ],
+      "workflow": "DELIVERY_LOOP.md",
+      "tests": [
+        "test_A14_fake_flags",
+        "test_A08_missing_report_and_attachment"
+      ],
+      "adoption": "independent implementation/adaptation",
+      "semantic_review": "Reviewed with limits and exclusions in FUSION.md",
+      "full_project_test": "not_run"
+    }
+  ]
+}

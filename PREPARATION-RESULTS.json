@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "version": "0.2.0",
+  "rules": "2026-09-10-r6",
+  "component_tests": {
+    "count": 25,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 15.649460077285767
+  },
+  "isolated_cli_operations": 13,
+  "powershell_adapter": "negative verified",
+  "migration_operations": 11,
+  "fusion_mappings": 9,
+  "upstream_sources": 4,
+  "full_project_trial": "not_run",
+  "remote_ci": "not_configured",
+  "code_sha256": {
+    "jxcheck/core.py": "537ec8bed559d421f2e5ee5aa03c91c358995a68d606119317c5e4b14a26b2b3",
+    "jxcheck/__init__.py": "4b34a6289a10707367e68f72943cd992dc66b565cc24cbdc0738642e4a6bf95e",
+    "jxcheck/__main__.py": "6deb266c269ec429191ba647e36d7dec081eaf9640fa4091ea64e2eb7f9b307a",
+    "tests/test_core.py": "28f8e7847185b66e6e1725b9ca790e70f0baac3edbf3b84c1a3bd9712661cb10",
+    "tests/test_lifecycle.py": "d90e14a241a498949df8f253744248d68d1e98c6671da7e1afe2153156803a39"
+  }
+}

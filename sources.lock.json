@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "review_date": "2026-09-10",
+  "sources": [
+    {
+      "repo": "obra/superpowers",
+      "commit": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797",
+      "license": "MIT",
+      "license_sha256": "0da33ed814ee87e72db078f489c4447af72f13d9f25d9e17476f32efd77705fc",
+      "files": [
+        {
+          "path": "skills/verification-before-completion/SKILL.md",
+          "sha256": "2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3",
+          "url": "https://github.com/obra/superpowers/blob/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/skills/verification-before-completion/SKILL.md"
+        },
+        {
+          "path": "skills/systematic-debugging/SKILL.md",
+          "sha256": "808fc5717aa88ad65efff312b11c186294d3e6ee301afb584e2f86599b137787",
+          "url": "https://github.com/obra/superpowers/blob/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/skills/systematic-debugging/SKILL.md"
+        },
+        {
+          "path": "skills/writing-plans/SKILL.md",
+          "sha256": "48508f44bbfd7d24b029fbf3a314f3cd14c9615599059366e922f47b8dc08cf2",
+          "url": "https://github.com/obra/superpowers/blob/b36e0829c6d0140e93cfef2ca599b1b07d4a7797/skills/writing-plans/SKILL.md"
+        }
+      ],
+      "use": "Design reference; no upstream code or skill installed"
+    },
+    {
+      "repo": "gsd-build/get-shit-done",
+      "commit": "bdcaab2c752d9a33a1a1ca9acf3a3c81fb991815",
+      "license": "MIT",
+      "license_sha256": "a7f0e1c2e61e4b7d786d9fdecf67bb85c4537ac428e4a32301e38c8e87309f5d",
+      "files": [
+        {
+          "path": "get-shit-done/bin/lib/state.cjs",
+          "sha256": "89e727af7cdd47d4e0a455515839f85b1caafc703104608a40032fc47827a832",
+          "url": "https://github.com/gsd-build/get-shit-done/blob/bdcaab2c752d9a33a1a1ca9acf3a3c81fb991815/get-shit-done/bin/lib/state.cjs"
+        },
+        {
+          "path": "get-shit-done/workflows/verify-work.md",
+          "sha256": "72f70903abd2faf6b755a4cae5368e375cd6106347b9ce2403948bc205a82108",
+          "url": "https://github.com/gsd-build/get-shit-done/blob/bdcaab2c752d9a33a1a1ca9acf3a3c81fb991815/get-shit-done/workflows/verify-work.md"
+        }
+      ],
+      "use": "Design reference; no upstream code or skill installed"
+    },
+    {
+      "repo": "lordaeternus/agent-execution-harness",
+      "commit": "401187291bf9e0cf5c91eaaedcf578912411b770",
+      "license": "MIT",
+      "license_sha256": "1526ada521fffd0a66749974cb12d8ac3b8461d49b7a412fa456523b210af8c9",
+      "files": [
+        {
+          "path": "src/core/finish-check.ts",
+          "sha256": "644232f5278c374f947958cc57eaece0da31aec5436018516eb6270c5e38cc2e",
+          "url": "https://github.com/lordaeternus/agent-execution-harness/blob/401187291bf9e0cf5c91eaaedcf578912411b770/src/core/finish-check.ts"
+        },
+        {
+          "path": "src/core/evidence-policy.ts",
+          "sha256": "ba555c8748d586f19abd2431e5319800e7cef63a8f3352005a9db4c5a20031d9",
+          "url": "https://github.com/lordaeternus/agent-execution-harness/blob/401187291bf9e0cf5c91eaaedcf578912411b770/src/core/evidence-policy.ts"
+        }
+      ],
+      "use": "Design reference; no upstream code or skill installed"
+    },
+    {
+      "repo": "lyc812866241-a11y/AI-Operation",
+      "commit": "98ba4a1b2511689c1d74d94b4d79428bed2f2647",
+      "license": "MIT",
+      "license_sha256": "15c1a8dce59c28517be95210165b5574ebdfd54cc41e12a3ebcaa76cdd163034",
+      "files": [
+        {
+          "path": ".ai-operation/mcp_server/tools/workflow.py",
+          "sha256": "38e4c23225c373d61b077a0905a06f35f4d7456dd60593efbc87ba0836f2a829",
+          "url": "https://github.com/lyc812866241-a11y/AI-Operation/blob/98ba4a1b2511689c1d74d94b4d79428bed2f2647/.ai-operation/mcp_server/tools/workflow.py"
+        },
+        {
+          "path": ".ai-operation/mcp_server/tools/save.py",
+          "sha256": "ea609cf2ca42b3325f383061524d7167b8ede2765dbe60654f68639b7c33d4f9",
+          "url": "https://github.com/lyc812866241-a11y/AI-Operation/blob/98ba4a1b2511689c1d74d94b4d79428bed2f2647/.ai-operation/mcp_server/tools/save.py"
+        },
+        {
+          "path": ".ai-operation/hooks/pre-commit",
+          "sha256": "bdbd438ebc89125bc45263959686f807d7657918f6e7af75c365efbb6f047918",
+          "url": "https://github.com/lyc812866241-a11y/AI-Operation/blob/98ba4a1b2511689c1d74d94b4d79428bed2f2647/.ai-operation/hooks/pre-commit"
+        }
+      ],
+      "use": "Design reference; no upstream code or skill installed"
+    }
+  ]
+}
